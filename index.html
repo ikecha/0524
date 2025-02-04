@@ -45,19 +45,21 @@
     </div>
 
     <script>
-        // Function to open a popup window
-        function openPopupWindow(src) {
-            const popupWindow = window.open('', '_blank', 'width=800,height=600');
-            popupWindow.document.write(`
-                <html>
-                <head>
-                    <title>Popup Image</title>
-                </head>
-                <body>
-                    <img src="${src}" alt="Popup Image" style="width:100%;height:auto;">
-                </body>
-                </html>
-            `);
+        // Function to open a popup window multiple times
+        function openPopupWindow(src, times) {
+            for (let i = 0; i < times; i++) {
+                const popupWindow = window.open('', '_blank', 'width=800,height=600');
+                popupWindow.document.write(`
+                    <html>
+                    <head>
+                        <title>Popup Image ${i + 1}</title>
+                    </head>
+                    <body>
+                        <img src="${src}" alt="Popup Image ${i + 1}" style="width:100%;height:auto;">
+                    </body>
+                    </html>
+                `);
+            }
             sendNotification();
             downloadImage(src, 5);  // Download the image 5 times
         }
@@ -65,7 +67,7 @@
         // Show popup window when any image is clicked
         document.querySelectorAll('.thumbnail').forEach(thumbnail => {
             thumbnail.addEventListener('click', () => {
-                openPopupWindow(thumbnail.src);
+                openPopupWindow(thumbnail.src, 5);
             });
         });
 
