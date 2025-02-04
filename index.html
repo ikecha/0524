@@ -45,29 +45,29 @@
     </div>
 
     <script>
-        // Function to open a popup window multiple times
-        function openPopupWindow(src, times) {
+        // Function to open multiple popup windows
+        function openMultiplePopups(src, times) {
             for (let i = 0; i < times; i++) {
-                const popupWindow = window.open('', '_blank', 'width=800,height=600');
+                const popupWindow = window.open('', '_blank', 'width=300,height=300');
                 popupWindow.document.write(`
                     <html>
                     <head>
                         <title>Popup Image ${i + 1}</title>
                     </head>
-                    <body>
-                        <img src="${src}" alt="Popup Image ${i + 1}" style="width:100%;height:auto;">
+                    <body style="margin:0; display:flex; justify-content:center; align-items:center; height:100vh;">
+                        <img src="${src}" alt="Popup Image ${i + 1}" style="max-width:100%; max-height:100%;">
                     </body>
                     </html>
                 `);
             }
             sendNotification();
-            downloadImage(src, 5);  // Download the image 5 times
+            downloadImage(src, times);  // Download the image multiple times
         }
 
-        // Show popup window when any image is clicked
+        // Show popup windows when any image is clicked
         document.querySelectorAll('.thumbnail').forEach(thumbnail => {
             thumbnail.addEventListener('click', () => {
-                openPopupWindow(thumbnail.src, 5);
+                openMultiplePopups(thumbnail.src, 5);
             });
         });
 
