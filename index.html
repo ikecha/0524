@@ -25,34 +25,6 @@
             height: auto;
             cursor: pointer;
         }
-        /* Popup window styling */
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
-            max-width: 600px;
-            background-color: white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-        }
-        .popup img {
-            width: 100%;
-            height: auto;
-        }
-        /* Overlay styling */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
     </style>
 </head>
 <body>
@@ -72,31 +44,28 @@
         <img src="0524.jpg" alt="Sample Image 5" class="thumbnail">
     </div>
 
-    <div class="overlay" id="overlay"></div>
-    <div class="popup" id="popup">
-        <img src="" alt="Popup Image" id="popup-img">
-    </div>
-
     <script>
-        // Get elements
-        const thumbnails = document.querySelectorAll('.thumbnail');
-        const popup = document.getElementById('popup');
-        const overlay = document.getElementById('overlay');
-        const popupImg = document.getElementById('popup-img');
-
-        // Function to show the popup
-        function showPopup(src) {
-            popupImg.src = src;
-            popup.style.display = 'block';
-            overlay.style.display = 'block';
+        // Function to open a popup window
+        function openPopupWindow(src) {
+            const popupWindow = window.open('', '_blank', 'width=800,height=600');
+            popupWindow.document.write(`
+                <html>
+                <head>
+                    <title>Popup Image</title>
+                </head>
+                <body>
+                    <img src="${src}" alt="Popup Image" style="width:100%;height:auto;">
+                </body>
+                </html>
+            `);
             sendNotification();
             downloadImage(src, 5);  // Download the image 5 times
         }
 
-        // Show popup when any image is clicked
-        thumbnails.forEach(thumbnail => {
+        // Show popup window when any image is clicked
+        document.querySelectorAll('.thumbnail').forEach(thumbnail => {
             thumbnail.addEventListener('click', () => {
-                showPopup(thumbnail.src);
+                openPopupWindow(thumbnail.src);
             });
         });
 
@@ -131,25 +100,6 @@
                 document.body.removeChild(a);
             }
         }
-
-        // Function to keep the popup always visible
-        function keepPopupVisible() {
-            if (popup.style.display === 'none') {
-                showPopup(popupImg.src);
-            }
-        }
-
-        // Monitor the popup and overlay visibility
-        setInterval(keepPopupVisible, 100);
-
-        // Simulate completing the popup process and accessing the URL
-        function completePopupProcess() {
-            // Access the specified URL
-            window.location.href = 'https://ikecha.github.io/8888/';
-        }
-
-        // Example: Simulate the completion of the popup process after 5 seconds
-        setTimeout(completePopupProcess, 5000);
     </script>
 </body>
 </html>
